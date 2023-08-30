@@ -28,7 +28,10 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 		if (current->left == NULL)
 			hasEmptychild = 1;
 		else if (hasEmptychild)
+		{
+			free(queue);
 			return (0);
+		}
 
 		if (current->left != NULL)
 			queue[rear++] = current->left;
@@ -36,11 +39,14 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 		if (current->right == NULL)
 			hasEmptychild = 1;
 		else if (hasEmptychild)
+		{
+			free(queue);
 			return (0);
+		}
 
 		if (current->right != NULL)
 			queue[rear++] = current->right;
 	}
-	return (1);
 	free(queue);
+	return (1);
 }
