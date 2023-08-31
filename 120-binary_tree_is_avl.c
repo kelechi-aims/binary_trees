@@ -37,7 +37,7 @@ int binary_tree_avl(const binary_tree_t *tree, int min, int max)
 		d = l_height > r_height ? l_height - r_height : r_height - l_height;
 		if (d > 1)
 			return (0);
-		return (binary_tree_avl(tree->left, min, tree->n -1) &&
+		return (binary_tree_avl(tree->left, min, tree->n - 1) &&
 			binary_tree_avl(tree->right, tree->n + 1, max));
 	}
 	return (1);
