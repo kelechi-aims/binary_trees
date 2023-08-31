@@ -25,14 +25,15 @@ int check_max_heap(const binary_tree_t *tree, int max_value)
  **/
 int binary_tree_is_heap(const binary_tree_t *tree)
 {
-	int tmp;
+	int is_complete, is_max_heap;
 
 	if (!tree)
 		return (0);
 
-	tmp = binary_tree_is_complete(tree);
-	if (!tmp)
+	is_complete = binary_tree_is_complete(tree);
+	if (!is_complete)
 		return (0);
 
-	return (check_max_heap(tree, tree->n));
+	is_max_heap = check_max_heap(tree, tree->n);
+	return (is_max_heap);
 }
