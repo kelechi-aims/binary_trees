@@ -8,19 +8,12 @@
  */
 heap_t *array_to_heap(int *array, size_t size)
 {
-	if (!array || size == 0)
-		return (NULL);
-
+	unsigned int idx;
 	heap_t *root = NULL;
 
-	for (size_t idx = 0; idx < size; idx++)
-	{
-		if (!heap_insert(&root, array[idx]))
-		{
-			binary_tree_delete(root);
-			return (NULL);
-		}
-	}
+	for (idx = 0; idx < size; idx++)
+		heap_insert(&root, array[idx]);
+
 	return (root);
 }
 
