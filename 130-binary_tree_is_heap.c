@@ -1,5 +1,5 @@
 #include "binary_trees.h"
-
+#include "102-binary_tree_is_complete.c"
 /**
  * check_max_heap - function that checks if a subtree is a max heap
  * @tree: pointer to the root
