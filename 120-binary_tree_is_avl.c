@@ -18,13 +18,13 @@ size_t binary_tree_height(const binary_tree_t *tree)
 }
 
 /**
- * binary_tree_is_bst - Checks if a binary tree is a valid BST.
+ * binary_tree_avl- Checks if a binary tree is a valid BST.
  * @tree: A pointer to the root node of the tree to check.
  * @min: The minimum allowed value for nodes in the tree.
  * @max: The maximum allowed value for nodes in the tree.
  * Return: 1 if @tree is a valid BST, 0 otherwise.
  */
-int binary_tree_is_bst(const binary_tree_t *tree, int min, int max)
+int binary_tree_avl(const binary_tree_t *tree, int min, int max)
 {
 	size_t l_height, r_height, d;
 
@@ -37,8 +37,8 @@ int binary_tree_is_bst(const binary_tree_t *tree, int min, int max)
 		d = l_height > r_height ? l_height - r_height : r_height - l_height;
 		if (d > 1)
 			return (0);
-		return (binary_tree_is_bst(tree->left, min, tree->n -1) &&
-			binary_tree_is_bst(tree->right, tree->n + 1, max));
+		return (binary_tree_avl(tree->left, min, tree->n -1) &&
+			binary_tree_avl(tree->right, tree->n + 1, max));
 	}
 	return (1);
 }
@@ -54,5 +54,5 @@ int binary_tree_is_avl(const binary_tree_t *tree)
 {
 	if (tree == NULL)
 		return (0);
-	return (binary_tree_is_bst(tree, INT_MIN, INT_MAX));
+	return (binary_tree_avl(tree, INT_MIN, INT_MAX));
 }
