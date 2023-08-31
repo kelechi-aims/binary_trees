@@ -2,31 +2,35 @@
 #include <stdlib.h>
 
 /**
- * heapify_down - funct that heapifies in a downward direction
+ * heapify_down - Heapifies the binary heap in a downward direction
  * @root: The root of the binary heap
  */
 void heapify_down(heap_t *root)
 {
-	if (!root)
-		return;
+    while (1)
+    {
+        heap_t *largest = root;
+        heap_t *left = root->left;
+        heap_t *right = root->right;
 
-	heap_t *largest = root;
-	heap_t *left = root->left;
-	heap_t *right = root->right;
+        if (left && left->n > largest->n)
+            largest = left;
 
-	if (left && left->n > largest->n)
-		largest = left;
+        if (right && right->n > largest->n)
+            largest = right;
 
-	if (right && right->n > largest->n)
-		largest = right;
-
-	if (largest != root)
-	{
-		int temp = root->n;
-		root->n = largest->n;
-		largest->n = temp;
-		heapify_down(largest);
-	}
+        if (largest != root)
+        {
+            int temp = root->n;
+            root->n = largest->n;
+            largest->n = temp;
+            root = largest;
+        }
+        else
+        {
+            break;
+        }
+    }
 }
 
 /**
@@ -36,37 +40,37 @@ void heapify_down(heap_t *root)
  */
 int heap_extract(heap_t **root)
 {
-	if (!root || !*root)
-		return (0);
+    if (!root || !*root)
+        return 0;
 
-	int extracted_value = (*root)->n;
-	heap_t *last_node = *root;
+    int extracted_value = (*root)->n;
+    heap_t *last_node = *root;
 
-	while (last_node->left || last_node->right)
-	{
-		if (!last_node->right || last_node->left->n > last_node->right->n)
-			last_node = last_node->left;
-		else
-			last_node = last_node->right;
-	}
+    while (last_node->left || last_node->right)
+    {
+        if (!last_node->right || last_node->left->n > last_node->right->n)
+            last_node = last_node->left;
+        else
+            last_node = last_node->right;
+    }
 
-	if (last_node == *root)
-	{
-		free(*root);
-		*root = NULL;
-		return (extracted_value);
-	}
+    if (last_node == *root)
+    {
+        free(*root);
+        *root = NULL;
+        return extracted_value;
+    }
 
-	(*root)->n = last_node->n;
+    (*root)->n = last_node->n;
 
-	if (last_node->parent->left == last_node)
-		last_node->parent->left = NULL;
-	else
-		last_node->parent->right = NULL;
+    if (last_node->parent->left == last_node)
+        last_node->parent->left = NULL;
+    else
+        last_node->parent->right = NULL;
 
-	free(last_node);
-	heapify_down(*root);
+    free(last_node);
+    heapify_down(*root);
 
-	return (extracted_value);
+    return extracted_value;
 }
 
