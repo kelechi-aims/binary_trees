@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 /**
- * heapify_down - Heapifies the binary heap in a downward direction
+ * heapify_down - Repair the heap whose root element is at index 'root'
  * @root: The root of the binary heap
  */
 void heapify_down(heap_t *root)
@@ -36,7 +36,7 @@ void heapify_down(heap_t *root)
 /**
  * heap_extract - extracts the root node from a Max Binary Heap
  * @root: pointer to the heap root
- * Return: value of extracted node
+ * Return: value of extracted node or 0 on failure
  */
 int heap_extract(heap_t **root)
 {
@@ -48,7 +48,7 @@ int heap_extract(heap_t **root)
 
     while (last_node->left || last_node->right)
     {
-        if (!last_node->right || last_node->left->n > last_node->right->n)
+        if (!last_node->right || last_node->left->n >= last_node->right->n)
             last_node = last_node->left;
         else
             last_node = last_node->right;
