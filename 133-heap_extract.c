@@ -1,4 +1,5 @@
 #include "binary_trees.h"
+#include <stdlib.h>
 /**
  * tree_height - func that measures the height of a binary tree
  * @tree: pointer to the root
