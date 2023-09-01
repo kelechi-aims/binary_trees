@@ -2,20 +2,8 @@
 #include <stdlib.h>
 
 /**
- * swap_values - swaps the values of two nodes
- * @node1: pointer to the first node
- * @node2: pointer to the second node
- */
-void swap_values(heap_t *node1, heap_t *node2)
-{
-    int temp = node1->n;
-    node1->n = node2->n;
-    node2->n = temp;
-}
-
-/**
- * heapify_down - restores the max heap property from the root downwards
- * @root: pointer to the root of the heap
+ * heapify_down - Restores the max-heap property starting from root
+ * @root: Pointer to the root node of the heap
  */
 void heapify_down(heap_t *root)
 {
@@ -31,15 +19,17 @@ void heapify_down(heap_t *root)
 
     if (largest != root)
     {
-        swap_values(root, largest);
+        int temp = root->n;
+        root->n = largest->n;
+        largest->n = temp;
         heapify_down(largest);
     }
 }
 
 /**
- * heap_extract - extracts the root node from a Max Binary Heap
- * @root: double pointer to the heap root
- * Return: value of extracted node or 0 if failed
+ * heap_extract - Extracts the root node from a Max Binary Heap
+ * @root: Double pointer to the heap root
+ * Return: Value of extracted node or 0 if failed
  */
 int heap_extract(heap_t **root)
 {
@@ -47,28 +37,30 @@ int heap_extract(heap_t **root)
         return (0);
 
     int extracted_value = (*root)->n;
-    heap_t *last_node = NULL;
+    heap_t *last_node = *root;
+    heap_t *parent = NULL;
 
-    if (!(*root)->left && !(*root)->right)
+    while (last_node->right)
+    {
+        parent = last_node;
+        last_node = last_node->right;
+    }
+
+    if (last_node == *root)
     {
         free(*root);
         *root = NULL;
         return (extracted_value);
     }
 
-    last_node = *root;
-    while (last_node->right)
-        last_node = last_node->right;
-
     (*root)->n = last_node->n;
 
-    if (last_node->parent->right)
-        last_node->parent->right = NULL;
+    if (parent->right)
+        parent->right = NULL;
     else
-        last_node->parent->left = NULL;
+        parent->left = NULL;
 
     free(last_node);
     heapify_down(*root);
     return (extracted_value);
 }
-
