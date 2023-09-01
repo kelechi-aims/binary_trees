@@ -68,37 +68,38 @@ void _preorder(heap_t *tree, heap_t **node, size_t height)
 
 /**
  * heapify - func that heapifies max binary heap
- * @root: pointer to binary heap
+ * @root: pointer to binary heapi
+ * Return: void
  */
 void heapify(heap_t *root)
 {
 	int extimated_value;
-	heap_t *tmp_old, *tmp_new;
+	heap_t *tmp1, *tmp2;
 
-	if (root == NULL)
+	if (!root)
 		return;
 
-	tmp_old = root;
+	tmp1 = root;
 
 	while (1)
 	{
-		if (!tmp_old->left)
+		if (!tmp1->left)
 			break;
-		if (!tmp_old->right)
-			tmp_new = tmp_old->left;
+		if (!tmp1->right)
+			tmp2 = tmp1->left;
 		else
 		{
-			if (tmp_old->left->n > tmp_new->right->n)
-				tmp_new = tmp_old->left;
+			if (tmp1->left->n > tmp1->right->n)
+				tmp2 = tmp1->left;
 			else
-				tmp_new = tmp_old->right;
+				tmp2 = tmp1->right;
 		}
-		if (tmp_old->n > tmp_new->n)
+		if (tmp1->n > tmp2->n)
 			break;
-		extimated_value = tmp_old->n;
-		tmp_old->n = tmp_new->n;
-		tmp_new->n = value;
-		tmp_old = tmp_new;
+		value = tmp1->n;
+		tmp1->n = tmp2->n;
+		tmp2->n = value;
+		tmp1 = tmp2;
 	}
 }
 
