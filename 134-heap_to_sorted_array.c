@@ -7,28 +7,19 @@
  */
 size_t tree_size(const binary_tree_t *tree)
 {
+	size_t l_height = 0;
+	size_t r_height = 0;
+
 	if (!tree)
 		return (0);
 
-	return (1 + tree_size(tree->left) + tree_size(tree->right));
-}
+	if (tree->left)
+		l_height = 1 + tree_size(tree->left);
 
-/**
- * copy_heap_to_array - copies heap elements to an array in descending order
- * @heap: pointer to the root node of the heap
- * @array: pointer to the array
- * @index: current index in the array
- */
-void copy_heap_to_array(heap_t *heap, int *array, int *index)
-{
-	if (!heap)
-		return;
+	if (tree->right)
+		r_height = 1 + tree_size(tree->right);
 
-	array[*index] = heap->n;
-	(*index)++;
-
-	copy_heap_to_array(heap->left, array, index);
-	copy_heap_to_array(heap->right, array, index);
+	return (l_height + r_height);
 }
 
 /**
@@ -40,18 +31,18 @@ void copy_heap_to_array(heap_t *heap, int *array, int *index)
 int *heap_to_sorted_array(heap_t *heap, size_t *size)
 {
 	int *sorted_array;
-	size_t array_size;
+	size_t i;
 
 	if (!heap || !size)
-	return (NULL);
+		return (NULL);
 
-	array_size = tree_size(heap);
-	sorted_array = malloc(sizeof(int) * array_size);
+	*size = tree_size(heap) + 1;
+	sorted_array = malloc(sizeof(int) * (*size));
 	if (!sorted_array)
 		return (NULL);
 
-	*size = array_size;
-	copy_heap_to_array(heap, sorted_array, &(int){0});
+	for (i = 0; heap; i++)
 
+		sorted_array[i] = heap_extract(&heap);
 	return (sorted_array);
 }
