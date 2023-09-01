@@ -73,7 +73,7 @@ void _preorder(heap_t *tree, heap_t **node, size_t height)
  */
 void heapify(heap_t *root)
 {
-	int extimated_value;
+	int value;
 	heap_t *tmp1, *tmp2;
 
 	if (!root)
@@ -110,10 +110,10 @@ void heapify(heap_t *root)
  **/
 int heap_extract(heap_t **root)
 {
-	int extimated_value;
+	int value;
 	heap_t *heap_r, *node;
 
-	if (root == NULL || *root == NULL)
+	if (!root || !*root)
 		return (0);
 	heap_r = *root;
 	value = heap_r->n;
@@ -121,7 +121,7 @@ int heap_extract(heap_t **root)
 	{
 		*root = NULL;
 		free(heap_r);
-		return (extimated_value);
+		return (value);
 	}
 
 	_preorder(heap_r, &node, tree_height(heap_r));
@@ -134,5 +134,5 @@ int heap_extract(heap_t **root)
 	free(node);
 	heapify(heap_r);
 	*root = heap_r;
-	return (extimated_value);
+	return (value);
 }
