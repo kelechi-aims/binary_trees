@@ -2,137 +2,73 @@
 #include <stdlib.h>
 
 /**
- * tree_height - func that measures the height of a binary tree
- * @tree: pointer to the root
- * Return: Height or 0 if tree is NULL
+ * swap_values - swaps the values of two nodes
+ * @node1: pointer to the first node
+ * @node2: pointer to the second node
  */
-size_t tree_height(const heap_t *tree)
+void swap_values(heap_t *node1, heap_t *node2)
 {
-	size_t left_h = 0;
-	size_t right_h = 0;
-
-	if (tree == NULL)
-		return (0);
-
-	if (tree->left)
-		left_h = 1 + tree_height(tree->left);
-
-	if (tree->right)
-		right_h = 1 + tree_height(tree->right);
-
-	if (left_h > right_h)
-		return (left_h);
-	return (right_h);
-}
-/**
- * tree_size_h - func that measures sum of heights of a binary tree
- * @tree: pointer to the root
- * Return: Height or 0 if tree is NULL
- */
-size_t tree_size_h(const binary_tree_t *tree)
-{
-	size_t left_h = 0;
-	size_t right_h = 0;
-
-	if (tree == NULL)
-		return (0);
-
-	if (tree->left)
-		left_h = 1 + tree_size_h(tree->left);
-
-	if (tree->right)
-		right_h = 1 + tree_size_h(tree->right);
-
-	return (left_h + right_h);
+    int temp = node1->n;
+    node1->n = node2->n;
+    node2->n = temp;
 }
 
 /**
- * _preorder - func that goes through a binary tree
- * @tree: pointer to the root
- * @node: pointer to last note pointer
- * @height: height of tree
- * Return: void
+ * heapify_down - restores the max heap property from the root downwards
+ * @root: pointer to the root of the heap
  */
-void _preorder(heap_t *tree, heap_t **node, size_t height)
+void heapify_down(heap_t *root)
 {
-	if (tree == NULL)
-		return;
+    heap_t *largest = root;
+    heap_t *left = root->left;
+    heap_t *right = root->right;
 
-	if (height == NULL)
-		*node = tree;
-	height--;
+    if (left && left->n > largest->n)
+        largest = left;
 
-	_preorder(tree->left, node, height);
-	_preorder(tree->right, node, height);
+    if (right && right->n > largest->n)
+        largest = right;
+
+    if (largest != root)
+    {
+        swap_values(root, largest);
+        heapify_down(largest);
+    }
 }
 
 /**
- * heapify - func that heapifies max binary heap
- * @root: pointer to binary heapi
- * Return: void
+ * heap_extract - extracts the root node from a Max Binary Heap
+ * @root: double pointer to the heap root
+ * Return: value of extracted node or 0 if failed
  */
-void heapify(heap_t *root)
-{
-	int value;
-	heap_t *tmp1, *tmp2;
-
-	if (!root)
-		return;
-
-	tmp1 = root;
-
-	while (1)
-	{
-		if (!tmp1->left)
-			break;
-		if (!tmp1->right)
-			tmp2 = tmp1->left;
-		else
-		{
-			if (tmp1->left->n > tmp1->right->n)
-				tmp2 = tmp1->left;
-			else
-				tmp2 = tmp1->right;
-		}
-		if (tmp1->n > tmp2->n)
-			break;
-		value = tmp1->n;
-		tmp1->n = tmp2->n;
-		tmp2->n = value;
-		tmp1 = tmp2;
-	}
-}
-
-/**
- * heap_extract - func that extracts root node from a Max Binary Heap
- * @root: pointer to the heap root
- * Return: extracted value
- **/
 int heap_extract(heap_t **root)
 {
-	int value;
-	heap_t *heap_r, *node;
+    if (!root || !*root)
+        return (0);
 
-	if (!root || !*root)
-		return (0);
-	heap_r = *root;
-	value = heap_r->n;
-	if (!heap_r->left && !heap_r->right)
-	{
-		*root = NULL;
-		free(heap_r);
-		return (value);
-	}
+    int extracted_value = (*root)->n;
+    heap_t *last_node = NULL;
 
-	_preorder(heap_r, &node, tree_height(heap_r));
+    if (!(*root)->left && !(*root)->right)
+    {
+        free(*root);
+        *root = NULL;
+        return (extracted_value);
+    }
 
-	heap_r->n = node->n;
-	if (node->parent->right)
-		node->parent->right = NULL;
-	else
-		node->parent->left = NULL;
-	free(node);
-	heapify(heap_r);
-	*root = heap_r;
-	return (value);
+    last_node = *root;
+    while (last_node->right)
+        last_node = last_node->right;
+
+    (*root)->n = last_node->n;
+
+    if (last_node->parent->right)
+        last_node->parent->right = NULL;
+    else
+        last_node->parent->left = NULL;
+
+    free(last_node);
+    heapify_down(*root);
+    return (extracted_value);
 }
+
